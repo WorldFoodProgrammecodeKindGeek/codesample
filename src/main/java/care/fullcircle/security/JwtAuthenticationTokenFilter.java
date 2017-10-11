@@ -23,6 +23,11 @@ import java.util.Enumeration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Default Json Web Token encoder/decoder.
+ *
+ * @author Oleh Kuprovskyi <oleh.kuprovskyi@kindgeek.com>
+ */
 public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());

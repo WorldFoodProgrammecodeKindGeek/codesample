@@ -57,4 +57,6 @@ external.url.pattern=/account/test
 
 endpoints.enabled=false
 endpoints.info.enabled=false
+
+access.control.allow.origin:*
 ```
