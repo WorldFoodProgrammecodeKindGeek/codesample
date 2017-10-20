@@ -1,9 +1,11 @@
 package care.fullcircle.security;
 
 
+import care.fullcircle.util.CalendarUtils;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -11,18 +13,24 @@ import java.util.Date;
 /**
  * Created by oleh.kuprovskyi on 05.10.17.
  */
+@Component
 public class JwtBuilder {
 
-    @Value("${jwt.header:'telemed'}")
-    private String tokenHeader;
+//    @Value("${jwt.header:'telemed'}")
+//    private String tokenHeader;
+
+    @Value("${jwt.expiration.time:'60'}")
+    private Integer expiration;
 
     public String createJWT(String email, String accountId, String role) {
 
-        long nowMillis = System.currentTimeMillis();
-        Date now = new Date(nowMillis);
+//        long nowMillis = System.currentTimeMillis();
+//        Date now = new Date(nowMillis);
+        Date now = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
-        calendar.add(Calendar.HOUR, 1);
+//        calendar.add(Calendar.HOUR, 3);
+        calendar.add(Calendar.SECOND, this.expiration);
 
         String jws = null;
 

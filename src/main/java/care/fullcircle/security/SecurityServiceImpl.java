@@ -95,7 +95,7 @@ public class SecurityServiceImpl implements SecurityService {
 
 
         // create the user credentials object
-        JwtUserDetails userDetails = new JwtUserDetails(accountId, email, roles,true, new Date());
+        JwtUserDetails userDetails = new JwtUserDetails(accountId, email, roles, true);
         userDetails.setUserToken(token);
         return (userDetails);
     }

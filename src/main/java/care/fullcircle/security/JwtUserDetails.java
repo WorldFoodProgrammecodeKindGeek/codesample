@@ -18,20 +18,19 @@ public class JwtUserDetails implements UserDetails {
     private final String email;
     private final Collection<? extends GrantedAuthority> authorities;
     private final boolean enabled;
-    private final Date tokenExpirationDate;
+//    private final Date tokenExpirationDate;
     private String userToken;
 
     public JwtUserDetails(
             Long accountId,
             String email,
             Collection<? extends GrantedAuthority> authorities,
-            boolean enabled,
-            Date tokenExpirationDate) {
+            boolean enabled) {
         this.accountId = accountId;
         this.email = email;
         this.authorities = authorities;
         this.enabled = enabled;
-        this.tokenExpirationDate = tokenExpirationDate;
+//        this.tokenExpirationDate = tokenExpirationDate;
     }
 
 
@@ -129,9 +128,9 @@ public class JwtUserDetails implements UserDetails {
     }
 
 //    @JsonIgnore
-    public Date getTokenExpirationDate() {
-        return tokenExpirationDate;
-    }
+//    public Date getTokenExpirationDate() {
+//        return tokenExpirationDate;
+//    }
 
 
     public String getUserToken() {
