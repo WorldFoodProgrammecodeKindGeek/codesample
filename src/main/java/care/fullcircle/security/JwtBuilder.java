@@ -16,7 +16,7 @@ public class JwtBuilder {
     @Value("${jwt.header:'telemed'}")
     private String tokenHeader;
 
-    public String createJWT(String username, String accountId, String role) {
+    public String createJWT(String email, String accountId, String role) {
 
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
@@ -29,7 +29,7 @@ public class JwtBuilder {
         try {
             jws = Jwts.builder()
                 .setIssuer("Telemed")
-                .claim("username", username)
+                .claim("email", email)
                 .claim("account_id", accountId)
                 .claim("role", role)
                 .setIssuedAt(now)

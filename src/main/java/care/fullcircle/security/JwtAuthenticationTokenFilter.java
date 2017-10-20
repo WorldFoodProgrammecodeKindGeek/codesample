@@ -97,6 +97,7 @@ public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
             // get user credentials
             UserDetails userDetails = security.getUserByToken(authToken);
 
+
             // set user credentials to context
             UsernamePasswordAuthenticationToken userPassToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             userPassToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));

@@ -74,19 +74,28 @@ public class SecurityServiceImpl implements SecurityService {
             roles.add(auth);
         }
 
-        Long idl = 0L;
+//        Long idl = 0L;
 
-        Object id = claims.get("id");
+//        Object id = claims.get("id");
+//        if (id instanceof String) {
+//           idl = new Long(Long.parseLong((String)id));
+//        } else if (id instanceof Integer) {
+//           idl =  Long.valueOf(((Integer)id).longValue());
+//        }
+
+//        log.debug("id as long is " + idl);
+        String email = (String)claims.get("email");
+        Object id =  claims.get("account_id");
+        Long accountId = 0L;
         if (id instanceof String) {
-           idl = new Long(Long.parseLong((String)id));
+            accountId = new Long(Long.parseLong((String)id));
         } else if (id instanceof Integer) {
-           idl =  Long.valueOf(((Integer)id).longValue());
+            accountId =  Long.valueOf(((Integer)id).longValue());
         }
 
-        log.debug("id as long is " + idl);
-        String userName = (String)claims.get("username");
+
         // create the user credentials object
-        JwtUserDetails userDetails = new JwtUserDetails(idl, userName, userName, userName, userName, "password", roles, true, new Date());
+        JwtUserDetails userDetails = new JwtUserDetails(accountId, email, roles,true, new Date());
         userDetails.setUserToken(token);
         return (userDetails);
     }
