@@ -86,6 +86,8 @@ public class SecurityServiceImpl implements SecurityService {
 //        log.debug("id as long is " + idl);
         String email = (String)claims.get("email");
         Object id =  claims.get("account_id");
+        String ip = (String)claims.get("clientIP");
+        String fingerprint = (String)claims.get("browserFingerprintDigest");
         Long accountId = 0L;
         if (id instanceof String) {
             accountId = new Long(Long.parseLong((String)id));
@@ -93,13 +95,11 @@ public class SecurityServiceImpl implements SecurityService {
             accountId =  Long.valueOf(((Integer)id).longValue());
         }
 
-
         // create the user credentials object
-        JwtUserDetails userDetails = new JwtUserDetails(accountId, email, roles, true);
+        JwtUserDetails userDetails = new JwtUserDetails(accountId, email, roles, true, ip, fingerprint);
         userDetails.setUserToken(token);
         return (userDetails);
     }
-
 
     //=======================
 //    public UserDetails getUserFromDB(String token) {

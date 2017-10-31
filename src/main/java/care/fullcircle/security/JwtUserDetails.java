@@ -5,12 +5,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Date;
 
 public class JwtUserDetails implements UserDetails {
 
 
     private final Long accountId;
+    private final String ip;
+    private final String fingerprint;
 //    private final String username;
 //    private final String firstname;
 //    private final String lastname;
@@ -25,14 +26,17 @@ public class JwtUserDetails implements UserDetails {
             Long accountId,
             String email,
             Collection<? extends GrantedAuthority> authorities,
-            boolean enabled) {
+            boolean enabled,
+            String ip,
+            String fingerprint) {
         this.accountId = accountId;
         this.email = email;
         this.authorities = authorities;
         this.enabled = enabled;
+        this.ip = ip;
+        this.fingerprint = fingerprint;
 //        this.tokenExpirationDate = tokenExpirationDate;
     }
-
 
     //    public JwtUserDetails(
 //            Long id,
@@ -127,7 +131,17 @@ public class JwtUserDetails implements UserDetails {
         return enabled;
     }
 
-//    @JsonIgnore
+    @JsonIgnore
+    public String getIp() {
+        return ip;
+    }
+
+    @JsonIgnore
+    public String getFingerprint() {
+        return fingerprint;
+    }
+
+    //    @JsonIgnore
 //    public Date getTokenExpirationDate() {
 //        return tokenExpirationDate;
 //    }

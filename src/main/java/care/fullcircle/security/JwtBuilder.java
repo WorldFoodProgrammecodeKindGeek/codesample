@@ -1,7 +1,6 @@
 package care.fullcircle.security;
 
 
-import care.fullcircle.util.CalendarUtils;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,24 +21,22 @@ public class JwtBuilder {
     @Value("${jwt.expiration.time:60}")
     private Integer expiration;
 
-    public String createJWT(String email, String accountId, String role) {
+    public String createJWT(String email, String accountId, String role, String clientIP, String browserFingerprintDigest) {
 
-//        long nowMillis = System.currentTimeMillis();
-//        Date now = new Date(nowMillis);
         Date now = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
-//        calendar.add(Calendar.HOUR, 3);
         calendar.add(Calendar.SECOND, this.expiration);
 
         String jws = null;
-
         try {
             jws = Jwts.builder()
                 .setIssuer("Telemed")
                 .claim("email", email)
                 .claim("account_id", accountId)
                 .claim("role", role)
+                .claim("clientIP", clientIP)
+                .claim("browserFingerprintDigest", browserFingerprintDigest)
                 .setIssuedAt(now)
                 .setExpiration(calendar.getTime())
                 .signWith(
