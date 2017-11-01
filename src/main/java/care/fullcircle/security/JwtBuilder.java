@@ -21,7 +21,7 @@ public class JwtBuilder {
     @Value("${jwt.expiration.time:60}")
     private Integer expiration;
 
-    public String createJWT(String email, String accountId, String role, String clientIP, String browserFingerprintDigest) {
+    public String createJWT(String email, String accountId, String[] role, String clientIP, String browserFingerprintDigest) {
 
         Date now = new Date();
         Calendar calendar = Calendar.getInstance();
