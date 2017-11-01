@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  */
 public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
 
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Value("${jwt.header}")
     private String tokenHeader;
@@ -48,7 +48,7 @@ public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
-        log.debug("Security filter request - " + httpRequest.getRequestURI());
+        LOGGER.debug("Security filter request - " + httpRequest.getRequestURI());
 
         // quick route - if external
         if (externalUrlPattern != null && !externalUrlPattern.isEmpty()) {
@@ -56,7 +56,7 @@ public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
             Pattern p = Pattern.compile(externalUrlPattern);
             Matcher m = p.matcher(((HttpServletRequest)servletRequest).getRequestURI());
             if(m.find()){
-                log.info("security check - external URI " + ((HttpServletRequest)servletRequest).getRequestURI() + " is verified for pattern " + externalUrlPattern);
+                LOGGER.info("security check - external URI " + ((HttpServletRequest)servletRequest).getRequestURI() + " is verified for pattern " + externalUrlPattern);
                 filterChain.doFilter(servletRequest, servletResponse);
                 return;
             }
@@ -65,11 +65,10 @@ public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
 
         // exclude OPTIONS tests for Aharon
         if ( httpRequest.getMethod().equals(RequestMethod.OPTIONS.name()) ) {
-            log.debug("security check - passing method " + RequestMethod.OPTIONS.name());
+            LOGGER.debug("security check - passing method " + RequestMethod.OPTIONS.name());
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
-
 
         // check token
         String fullToken = httpRequest.getHeader(this.tokenHeader);
@@ -78,7 +77,7 @@ public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
             return;
         } else {
             String authToken = fullToken.substring("Bearer".length() + 1, fullToken.length());
-            log.debug("Security filter activated for " + httpRequest.getRequestURI() + " with token " + authToken);
+            LOGGER.debug("Security filter activated for " + httpRequest.getRequestURI() + " with token " + authToken);
 
             // verify token validity
             boolean valid = security.isTokenValid(authToken);
@@ -97,14 +96,13 @@ public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
             // get user credentials
             UserDetails userDetails = security.getUserByToken(authToken);
 
-
             // set user credentials to context
             UsernamePasswordAuthenticationToken userPassToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             userPassToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
             SecurityContextHolder.getContext().setAuthentication(userPassToken);
 
-            log.debug("continue with the chain...");
-            if (log.isTraceEnabled()){
+            LOGGER.debug("continue with the chain...");
+            if (LOGGER.isTraceEnabled()){
                 traceSession(servletRequest);
             }
 
@@ -118,7 +116,7 @@ public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
 
     //=======================
     private void setErrorResponse(ServletResponse response, String msg) throws IOException {
-        log.warn("Token error - " + msg);
+        LOGGER.warn("Token error - " + msg);
         ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED);
         ((HttpServletResponse) response).setHeader("WWW-Authenticate","Bearer realm=\"Service\", error=\"invalid_grant\", error_description=\"" + msg + ".\"");
     }
@@ -128,11 +126,11 @@ public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
     private void traceSession(ServletRequest request) {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         Enumeration<String> headerNames = httpRequest.getHeaderNames();
-        log.trace(((HttpServletRequest) request).getRequestURL().toString());
-        log.trace(((HttpServletRequest) request).getQueryString());
+        LOGGER.trace(((HttpServletRequest) request).getRequestURL().toString());
+        LOGGER.trace(((HttpServletRequest) request).getQueryString());
         if (headerNames != null) {
             while (headerNames.hasMoreElements()) {
-                log.trace("Header: " + httpRequest.getHeader(headerNames.nextElement()));
+                LOGGER.trace("Header: " + httpRequest.getHeader(headerNames.nextElement()));
             }
         }
     }

@@ -18,11 +18,14 @@ import java.util.Date;
 @Service
 public class SecurityServiceImpl implements SecurityService {
 
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 //    @Resource
 //    SecurityDaoImpl dao;
     @Value("${jwt.key}")
     private String jwtKey;
+
+    // HMAC key - Block serialization and storage as String in JVM memory
+    private transient byte[] keyHMAC = null;
 
     //=======================
     public boolean isTokenValid(String token) {
@@ -32,14 +35,22 @@ public class SecurityServiceImpl implements SecurityService {
             Jwts.parser().setSigningKey(getJwtKey()).parseClaimsJws(token);
             valid = true;
         } catch (SignatureException e) {
-            log.error("token validation failed with key " + jwtKey);
+            LOGGER.error("token validation failed with key " + jwtKey);
         } catch (ExpiredJwtException eje) {
-            log.debug("Token is expired - but valid");
+            LOGGER.debug("Token is expired - but valid");
             valid = true;
         }
 
         return (valid);
     }
+
+//    public boolean isTokenValidOwasp() {
+//        //Create a verification context for the token requesting explicitly the use of the HMAC-256 hashing algorithm
+//        JWTVerifier verifier = JWT.require(Algorithm.HMAC256(keyHMAC)).build();
+//
+//        //Verify the token, if the verification fail then a exception is throwed
+//        DecodedJWT decodedToken = verifier.verify(token);
+//    }
 
 
     //=======================
