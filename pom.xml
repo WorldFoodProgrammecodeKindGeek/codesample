@@ -21,19 +21,19 @@
         <java.version>1.8</java.version>
     </properties>
 
-    <repositories>
-        <!-- elastic repo -->
-        <repository>
-            <id>elastic</id>
-            <url>https://artifacts.elastic.co/maven</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+    <!--<repositories>-->
+        <!--&lt;!&ndash; elastic repo &ndash;&gt;-->
+        <!--<repository>-->
+            <!--<id>elastic</id>-->
+            <!--<url>https://artifacts.elastic.co/maven</url>-->
+            <!--<releases>-->
+                <!--<enabled>true</enabled>-->
+            <!--</releases>-->
+            <!--<snapshots>-->
+                <!--<enabled>false</enabled>-->
+            <!--</snapshots>-->
+        <!--</repository>-->
+    <!--</repositories>-->
 
     <dependencies>
         <dependency>
