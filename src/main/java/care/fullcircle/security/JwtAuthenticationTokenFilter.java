@@ -63,7 +63,7 @@ public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
         }
 
 
-        // exclude OPTIONS tests for Aharon
+        // exclude OPTIONS tests for me
         if ( httpRequest.getMethod().equals(RequestMethod.OPTIONS.name()) ) {
             LOGGER.debug("security check - passing method " + RequestMethod.OPTIONS.name());
             filterChain.doFilter(servletRequest, servletResponse);

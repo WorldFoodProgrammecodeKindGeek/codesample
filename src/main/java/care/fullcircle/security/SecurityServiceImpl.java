@@ -69,6 +69,36 @@ public class SecurityServiceImpl implements SecurityService {
 
 
     //=======================
+    public boolean isSessionIdValid(String authToken) {
+        boolean valid = true;
+
+        try {
+            //TODO extract and check
+            valid = false;
+        } catch (ExpiredJwtException eje) {
+            System.out.println("SessionId is not valid " );
+        }
+
+        return valid;
+    }
+
+
+    //=======================
+    public boolean isClientIpValid(String authToken) {
+        boolean valid = true;
+
+        try {
+            //TODO extract and check
+            valid = false;
+        } catch (ExpiredJwtException eje) {
+            System.out.println("ClientIP is not valid " );
+        }
+
+        return valid;
+    }
+
+
+    //=======================
     public UserDetails getUserByToken(String token) {
         // get user roles
         Claims claims = Jwts.parser().setSigningKey(getJwtKey()).parseClaimsJws(token).getBody();
@@ -98,6 +128,7 @@ public class SecurityServiceImpl implements SecurityService {
         String email = (String)claims.get("email");
         Object id =  claims.get("account_id");
         String ip = (String)claims.get("clientIP");
+        String sessionId = (String)claims.get("sessionId");
         String fingerprint = (String)claims.get("browserFingerprintDigest");
         Long accountId = 0L;
         if (id instanceof String) {
@@ -107,7 +138,7 @@ public class SecurityServiceImpl implements SecurityService {
         }
 
         // create the user credentials object
-        JwtUserDetails userDetails = new JwtUserDetails(accountId, email, roles, true, ip, fingerprint);
+        JwtUserDetails userDetails = new JwtUserDetails(accountId, email, roles, true, ip, sessionId, fingerprint);
         userDetails.setUserToken(token);
         return (userDetails);
     }

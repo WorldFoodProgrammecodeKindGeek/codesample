@@ -21,7 +21,7 @@ public class JwtBuilder {
     @Value("${jwt.expiration.time:60}")
     private Integer expiration;
 
-    public String createJWT(String email, String accountId, String[] role, String clientIP, String browserFingerprintDigest) {
+    public String createJWT(String email, String accountId, String[] role, String clientIP, String sessionId, String browserFingerprintDigest) {
 
         Date now = new Date();
         Calendar calendar = Calendar.getInstance();
@@ -36,6 +36,7 @@ public class JwtBuilder {
                 .claim("account_id", accountId)
                 .claim("role", role)
                 .claim("clientIP", clientIP)
+                .claim("sessionId", sessionId)
                 .claim("browserFingerprintDigest", browserFingerprintDigest)
                 .setIssuedAt(now)
                 .setExpiration(calendar.getTime())

@@ -11,6 +11,7 @@ public class JwtUserDetails implements UserDetails {
 
     private final Long accountId;
     private final String ip;
+    private final String sessionId;
     private final String fingerprint;
 //    private final String username;
 //    private final String firstname;
@@ -28,12 +29,14 @@ public class JwtUserDetails implements UserDetails {
             Collection<? extends GrantedAuthority> authorities,
             boolean enabled,
             String ip,
+            String sessionId,
             String fingerprint) {
         this.accountId = accountId;
         this.email = email;
         this.authorities = authorities;
         this.enabled = enabled;
         this.ip = ip;
+        this.sessionId = sessionId;
         this.fingerprint = fingerprint;
 //        this.tokenExpirationDate = tokenExpirationDate;
     }
@@ -134,6 +137,11 @@ public class JwtUserDetails implements UserDetails {
     @JsonIgnore
     public String getIp() {
         return ip;
+    }
+
+    @JsonIgnore
+    public String getSessionId() {
+        return sessionId;
     }
 
     @JsonIgnore

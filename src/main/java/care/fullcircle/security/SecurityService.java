@@ -8,5 +8,9 @@ public interface SecurityService {
 
     boolean isTokenExpired(String authToken);
 
+    boolean isSessionIdValid(String authToken);
+
+    boolean isClientIpValid(String authToken);
+
     UserDetails getUserByToken(String token);
 }
