@@ -86,6 +86,20 @@ public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
                 return;
             }
 
+            // verify clientIp
+            valid = security.checkClientIp(httpRequest, authToken);
+            if (!valid) {
+                setErrorResponse(servletResponse, "Not a valid token");
+                return;
+            }
+
+            // verify sessionId
+            valid = security.checkSessionId(httpRequest, authToken);
+            if (!valid) {
+                setErrorResponse(servletResponse, "Not a valid token");
+                return;
+            }
+
             // check expiration
             boolean expired = security.isTokenExpired(authToken);
             if(expired) {
