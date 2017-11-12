@@ -1,6 +1,7 @@
 package care.fullcircle.security;
 
 import care.fullcircle.util.ClientIp;
+import care.fullcircle.util.SessionUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -46,6 +47,7 @@ public class SecurityServiceImpl implements SecurityService {
         return (valid);
     }
 
+    //=======================
     public boolean checkClientIp(HttpServletRequest httpServletRequest, String token) {
         boolean valid = false;
 
@@ -65,16 +67,29 @@ public class SecurityServiceImpl implements SecurityService {
         return (valid);
     }
 
+    //=======================
     public boolean checkSessionId(HttpServletRequest httpServletRequest, String token) {
         boolean valid = false;
-        Claims claims = Jwts.parser().setSigningKey(getJwtKey()).parseClaimsJws(token).getBody();
-        String ip = (String)claims.get("clientIP");
 
-        //
-        if (ClientIp.retrieveClientIP(httpServletRequest).equals(ip)) {
-            valid= true;
-        } else {
-            LOGGER.debug("ClientIp is not the same as requested");
+        try {
+            Claims claims = Jwts.parser().setSigningKey(getJwtKey()).parseClaimsJws(token).getBody();
+            String sessionId = (String)claims.get("sessionId");
+
+            if (SessionUtil.getSession(httpServletRequest, true).getId().equals(sessionId)) {
+                valid = true;
+            } else {
+                LOGGER.debug("SessionID is not valid");
+            }
+
+            if (SessionUtil.getSession(httpServletRequest, true).getId().equals(httpServletRequest.getRequestedSessionId())) {
+                valid = true;
+            } else {
+                valid = false;
+                LOGGER.debug("SessionID is not the same as requested");
+            }
+
+        } catch (SignatureException e) {
+            LOGGER.error("token validation failed with key " + jwtKey);
         }
 
         return (valid);
@@ -95,36 +110,36 @@ public class SecurityServiceImpl implements SecurityService {
         return (expired);
     }
 
-
-    //=======================
-    public boolean isSessionIdValid(String authToken) {
-        boolean valid = true;
-
-        try {
-            //TODO extract and check
-            valid = false;
-        } catch (ExpiredJwtException eje) {
-            System.out.println("SessionId is not valid " );
-        }
-
-        return valid;
-    }
-
-
-    //=======================
-    public boolean isClientIpValid(String authToken) {
-        boolean valid = true;
-
-        try {
-            //TODO extract and check
-            //TODO check getRequestedSessionId and currentSessionId
-            valid = false;
-        } catch (ExpiredJwtException eje) {
-            System.out.println("ClientIP is not valid " );
-        }
-
-        return valid;
-    }
+//
+//    //=======================
+//    public boolean isSessionIdValid(String authToken) {
+//        boolean valid = true;
+//
+//        try {
+//            //TODO extract and check
+//            valid = false;
+//        } catch (ExpiredJwtException eje) {
+//            System.out.println("SessionId is not valid " );
+//        }
+//
+//        return valid;
+//    }
+//
+//
+//    //=======================
+//    public boolean isClientIpValid(String authToken) {
+//        boolean valid = true;
+//
+//        try {
+//            //TODO extract and check
+//            //TODO check getRequestedSessionId and currentSessionId
+//            valid = false;
+//        } catch (ExpiredJwtException eje) {
+//            System.out.println("ClientIP is not valid " );
+//        }
+//
+//        return valid;
+//    }
 
 
     //=======================
