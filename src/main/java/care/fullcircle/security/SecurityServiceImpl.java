@@ -1,5 +1,6 @@
 package care.fullcircle.security;
 
+import care.fullcircle.util.ClientIp;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -12,6 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -44,13 +46,39 @@ public class SecurityServiceImpl implements SecurityService {
         return (valid);
     }
 
-//    public boolean isTokenValidOwasp() {
-//        //Create a verification context for the token requesting explicitly the use of the HMAC-256 hashing algorithm
-//        JWTVerifier verifier = JWT.require(Algorithm.HMAC256(keyHMAC)).build();
-//
-//        //Verify the token, if the verification fail then a exception is throwed
-//        DecodedJWT decodedToken = verifier.verify(token);
-//    }
+    public boolean checkClientIp(HttpServletRequest httpServletRequest, String token) {
+        boolean valid = false;
+
+        try {
+            Claims claims = Jwts.parser().setSigningKey(getJwtKey()).parseClaimsJws(token).getBody();
+            String ip = (String)claims.get("clientIP");
+
+            if (ClientIp.retrieveClientIP(httpServletRequest).equals(ip)) {
+                valid = true;
+            } else {
+                LOGGER.debug("ClientIp is not the same as requested");
+            }
+        } catch (SignatureException e) {
+            LOGGER.error("token validation failed with key " + jwtKey);
+        }
+
+        return (valid);
+    }
+
+    public boolean checkSessionId(HttpServletRequest httpServletRequest, String token) {
+        boolean valid = false;
+        Claims claims = Jwts.parser().setSigningKey(getJwtKey()).parseClaimsJws(token).getBody();
+        String ip = (String)claims.get("clientIP");
+
+        //
+        if (ClientIp.retrieveClientIP(httpServletRequest).equals(ip)) {
+            valid= true;
+        } else {
+            LOGGER.debug("ClientIp is not the same as requested");
+        }
+
+        return (valid);
+    }
 
 
     //=======================
