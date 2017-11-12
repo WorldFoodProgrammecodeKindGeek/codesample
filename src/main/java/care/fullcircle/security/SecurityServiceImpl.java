@@ -89,6 +89,7 @@ public class SecurityServiceImpl implements SecurityService {
 
         try {
             //TODO extract and check
+            //TODO check getRequestedSessionId and currentSessionId
             valid = false;
         } catch (ExpiredJwtException eje) {
             System.out.println("ClientIP is not valid " );
