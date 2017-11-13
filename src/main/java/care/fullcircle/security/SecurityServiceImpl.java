@@ -54,6 +54,7 @@ public class SecurityServiceImpl implements SecurityService {
         try {
             Claims claims = Jwts.parser().setSigningKey(getJwtKey()).parseClaimsJws(token).getBody();
             String ip = (String)claims.get("clientIP");
+            LOGGER.info("clientIP: " + ip);
 
             if (ClientIp.retrieveClientIP(httpServletRequest).equals(ip)) {
                 valid = true;
@@ -74,6 +75,7 @@ public class SecurityServiceImpl implements SecurityService {
         try {
             Claims claims = Jwts.parser().setSigningKey(getJwtKey()).parseClaimsJws(token).getBody();
             String sessionId = (String)claims.get("sessionId");
+            LOGGER.info("sessionId: " + sessionId);
 
             if (SessionUtil.getSession(httpServletRequest, true).getId().equals(sessionId)) {
                 valid = true;
@@ -81,9 +83,10 @@ public class SecurityServiceImpl implements SecurityService {
                 LOGGER.debug("SessionID is not valid");
             }
 
-            if (SessionUtil.getSession(httpServletRequest, true).getId().equals(httpServletRequest.getRequestedSessionId())) {
-                valid = true;
-            } else {
+            if (null != httpServletRequest.getRequestedSessionId() &&
+                    !SessionUtil.getSession(httpServletRequest, true).getId().equals(httpServletRequest.getRequestedSessionId())) {
+//                valid = true;
+//            } else {
                 valid = false;
                 LOGGER.debug("SessionID is not the same as requested");
             }
