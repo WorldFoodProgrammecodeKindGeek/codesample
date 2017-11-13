@@ -36,7 +36,7 @@ public class JwtBuilder {
                 .claim("account_id", accountId)
                 .claim("role", role)
                 .claim("clientIP", clientIP)
-                .claim("sessionId", sessionId)
+//                .claim("sessionId", sessionId)
                 .claim("browserFingerprintDigest", browserFingerprintDigest)
                 .setIssuedAt(now)
                 .setExpiration(calendar.getTime())
