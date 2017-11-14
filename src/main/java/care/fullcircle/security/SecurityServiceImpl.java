@@ -54,11 +54,14 @@ public class SecurityServiceImpl implements SecurityService {
         try {
             Claims claims = Jwts.parser().setSigningKey(getJwtKey()).parseClaimsJws(token).getBody();
             String ip = (String)claims.get("clientIP");
-            LOGGER.info("clientIP: " + ip);
+            String clientIp = ClientIp.retrieveClientIP(httpServletRequest);
 
-            if (ClientIp.retrieveClientIP(httpServletRequest).equals(ip)) {
+            if (clientIp.equals(ip)) {
                 valid = true;
             } else {
+                LOGGER.info("SecurityServiceImpl.checkClientIp: Not valid clientIp");
+                LOGGER.info("jwtIp: " + ip);
+                LOGGER.info("clientIP: " + clientIp);
                 LOGGER.debug("ClientIp is not the same as requested");
             }
         } catch (SignatureException e) {
