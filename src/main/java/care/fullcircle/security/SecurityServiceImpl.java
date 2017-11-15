@@ -16,12 +16,15 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 @Service
 public class SecurityServiceImpl implements SecurityService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+    private final String[] localIPs = {"0:0:0:0:0:0:0:1","127.0.0.1", "192.168.1.1", "192.168.0.1"};
 //    @Resource
 //    SecurityDaoImpl dao;
     @Value("${jwt.key}")
@@ -55,6 +58,10 @@ public class SecurityServiceImpl implements SecurityService {
             Claims claims = Jwts.parser().setSigningKey(getJwtKey()).parseClaimsJws(token).getBody();
             String ip = (String)claims.get("clientIP");
             String clientIp = ClientIp.retrieveClientIP(httpServletRequest);
+
+            if (Arrays.asList(localIPs).contains(clientIp)) {
+                return true;
+            }
 
             if (clientIp.equals(ip)) {
                 valid = true;
