@@ -1,5 +1,6 @@
 package care.fullcircle.security;
 
+import care.fullcircle.dto.security.JwtUserDetails;
 import care.fullcircle.util.ClientIp;
 import care.fullcircle.util.SessionUtil;
 import io.jsonwebtoken.Claims;
