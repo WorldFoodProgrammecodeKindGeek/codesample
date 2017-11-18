@@ -74,6 +74,7 @@ public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
         String fullToken = httpRequest.getHeader(this.tokenHeader);
         if (StringUtils.isEmpty(fullToken)) {
             fullToken = httpRequest.getParameter("access_token"); //httpRequest.getHeader(this.tokenHeader);
+            fullToken = "Bearer " + fullToken;
             if (StringUtils.isEmpty(fullToken)) {
                 setErrorResponse(servletResponse, "No bearer token available");
                 return;
