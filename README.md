@@ -50,6 +50,7 @@ public class AccountApplication extends SecuredApplication {}
 # Security configuration
 jwt.key=telemed
 jwt.header=Authorization
+jwt.uri.param=accessToken
 jwt.token.admin=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJUZWxlbWVkIiwiaWF0IjoxNTA3Mjk1MjQ4LCJleHAiOjE1Mzg4MzEyNDgsImF1ZCI6IiIsInN1YiI6IiIsInVzZXJuYW1lIjoiQWRtaW4iLCJhY2NvdW50X2lkIjoiMSIsInJvbGUiOiJST0xFX0FETUlOIn0.4Nt-sxkWiaY5WawxFsYNAqZjv-4O8Chtu-uTWer8Et0
 
 secured.url.pattern=/account/*

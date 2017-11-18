@@ -3,10 +3,7 @@ package care.fullcircle.security;
 import care.fullcircle.dto.security.JwtUserDetails;
 import care.fullcircle.util.ClientIp;
 import care.fullcircle.util.SessionUtil;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,10 +39,14 @@ public class SecurityServiceImpl implements SecurityService {
             Jwts.parser().setSigningKey(getJwtKey()).parseClaimsJws(token);
             valid = true;
         } catch (SignatureException e) {
-            LOGGER.error("token validation failed with key " + jwtKey);
+            LOGGER.error("token validation failed");
         } catch (ExpiredJwtException eje) {
-            LOGGER.debug("Token is expired - but valid");
+            LOGGER.error("Token is expired - but valid");
             valid = true;
+        } catch (MalformedJwtException exep) {
+            LOGGER.error("token validation failed");
+        } catch (Exception exep) {
+            LOGGER.error("token validation failed");
         }
 
         return (valid);

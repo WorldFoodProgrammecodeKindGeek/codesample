@@ -35,6 +35,9 @@ public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
     @Value("${jwt.header}")
     private String tokenHeader;
 
+    @Value("${jwt.uri.param:#{null}}")
+    private String accessToken;
+
     @Value("${external.url.pattern:#{null}}")
     private String externalUrlPattern;
 
@@ -73,12 +76,13 @@ public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
         // check token
         String fullToken = httpRequest.getHeader(this.tokenHeader);
         if (StringUtils.isEmpty(fullToken)) {
-            fullToken = httpRequest.getParameter("access_token"); //httpRequest.getHeader(this.tokenHeader);
+            fullToken = httpRequest.getParameter(this.accessToken);
             fullToken = "Bearer " + fullToken;
-            if (StringUtils.isEmpty(fullToken)) {
-                setErrorResponse(servletResponse, "No bearer token available");
-                return;
-            }
+        }
+
+        if (StringUtils.isEmpty(fullToken)) {
+            setErrorResponse(servletResponse, "No bearer token available");
+            return;
         } else {
             String authToken = fullToken.substring("Bearer".length() + 1, fullToken.length());
             LOGGER.debug("Security filter activated for " + httpRequest.getRequestURI() + " with token " + authToken);
