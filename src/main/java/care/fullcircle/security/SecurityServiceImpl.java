@@ -75,6 +75,10 @@ public class SecurityServiceImpl implements SecurityService {
             }
         } catch (SignatureException e) {
             LOGGER.error("token validation failed with key " + jwtKey);
+        } catch (MalformedJwtException exep) {
+            LOGGER.error("token validation failed");
+        } catch (Exception exep) {
+            LOGGER.error("token validation failed");
         }
 
         return (valid);
@@ -105,6 +109,10 @@ public class SecurityServiceImpl implements SecurityService {
 
         } catch (SignatureException e) {
             LOGGER.error("token validation failed with key " + jwtKey);
+        } catch (MalformedJwtException exep) {
+            LOGGER.error("token validation failed");
+        } catch (Exception exep) {
+            LOGGER.error("token validation failed");
         }
 
         return (valid);
@@ -120,6 +128,10 @@ public class SecurityServiceImpl implements SecurityService {
             expired = false;
         } catch (ExpiredJwtException eje) {
             System.out.println("Token is expired " );
+        } catch (MalformedJwtException exep) {
+            LOGGER.error("token validation failed");
+        } catch (Exception exep) {
+            LOGGER.error("token validation failed");
         }
 
         return (expired);
