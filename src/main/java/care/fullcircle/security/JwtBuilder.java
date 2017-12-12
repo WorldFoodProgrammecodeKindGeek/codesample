@@ -18,7 +18,7 @@ public class JwtBuilder {
 //    @Value("${jwt.header:'telemed'}")
 //    private String tokenHeader;
 
-    @Value("${jwt.expiration.time:3660}")
+    @Value("${jwt.expiration.time:420}")
     private Integer expiration;
 
     public String createJWT(String email, String accountId, String[] role, String clientIP, String sessionId, String browserFingerprintDigest) {

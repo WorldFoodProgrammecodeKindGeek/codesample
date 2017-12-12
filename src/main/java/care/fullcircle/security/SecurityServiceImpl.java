@@ -61,6 +61,7 @@ public class SecurityServiceImpl implements SecurityService {
             String ip = (String)claims.get("clientIP");
             String clientIp = ClientIp.retrieveClientIP(httpServletRequest);
 
+            // Allow access from local IP addresses
             if (Arrays.asList(localIPs).contains(clientIp)) {
                 return true;
             }
@@ -68,9 +69,6 @@ public class SecurityServiceImpl implements SecurityService {
             if (clientIp.equals(ip)) {
                 valid = true;
             } else {
-                LOGGER.info("SecurityServiceImpl.checkClientIp: Not valid clientIp");
-                LOGGER.info("jwtIp: " + ip);
-                LOGGER.info("clientIP: " + clientIp);
                 LOGGER.debug("ClientIp is not the same as requested");
             }
         } catch (SignatureException e) {
