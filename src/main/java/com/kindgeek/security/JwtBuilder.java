@@ -1,4 +1,4 @@
-package care.fullcircle.security;
+package com.kindgeek.security;
 
 
 import io.jsonwebtoken.Jwts;
@@ -15,9 +15,6 @@ import java.util.Date;
 @Component
 public class JwtBuilder {
 
-//    @Value("${jwt.header:'telemed'}")
-//    private String tokenHeader;
-
     @Value("${jwt.expiration.time:420}")
     private Integer expiration;
 
@@ -31,7 +28,7 @@ public class JwtBuilder {
         String jws = null;
         try {
             jws = Jwts.builder()
-                .setIssuer("Telemed")
+                .setIssuer("KindGeek")
                 .claim("email", email)
                 .claim("account_id", accountId)
                 .claim("role", role)
@@ -42,7 +39,7 @@ public class JwtBuilder {
                 .setExpiration(calendar.getTime())
                 .signWith(
                     SignatureAlgorithm.HS256,
-                    "telemed".getBytes("UTF-8")
+                    "KindGeek".getBytes("UTF-8")
                 )
                 .compact();
         } catch (Exception e) {

@@ -1,4 +1,4 @@
-package care.fullcircle.security;
+package com.kindgeek.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -14,7 +14,6 @@ public abstract class SecuredApplication implements ISecuredApplication {
 
     @Value("#{'${secured.url.pattern:/*}'}")
     private String securedUrlPattern;
-
 
     @Bean
     public FilterRegistrationBean authorizationFilterRegistration() {
@@ -35,5 +34,4 @@ public abstract class SecuredApplication implements ISecuredApplication {
     public Filter jwtAuthenticationFilter() {
         return (new JwtAuthenticationTokenFilter());
     }
-
 }

@@ -1,4 +1,4 @@
-package care.fullcircle.security;
+package com.kindgeek.security;
 
 import org.apache.log4j.Logger;
 import org.springframework.security.core.Authentication;
@@ -11,11 +11,11 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by yaromyryaremko on 08.11.17.
+ * @author Oleh Kuprovskyi <oleh.kuprovskyi@kindgeek.com>
  */
 @Service
 public class SecurityAccessImpl implements SecurityAccess {
-    private static final Logger LOGGER = Logger.getLogger(SecurityAccessImpl.class);
+    private static final Logger LOG = Logger.getLogger(SecurityAccessImpl.class);
 
 
     private List<? extends GrantedAuthority> getRoles() {
@@ -29,26 +29,20 @@ public class SecurityAccessImpl implements SecurityAccess {
 
     @Override
     public boolean denyAccessUnlessGranted(Collection<String> roles) {
+        boolean authenticated = false;
         List<? extends GrantedAuthority> authorities =  getRoles();
         List<String> rolesList = new ArrayList<>();
         for (int i = 0;i<authorities.size();i++) {
             rolesList.add(authorities.get(i).getAuthority());
         }
-        boolean authenticated = false;
+
         for(String role : roles){
             if(rolesList.contains(role)){
                 authenticated = true;
                 break;
             }
         }
-        if (!authenticated) {
-            LOGGER.info("You have no permissions!");
-            LOGGER.info("Your permissions: " + authorities);
-            LOGGER.info("Required permissions: " + roles);
-            return authenticated;
-        } else {
-            LOGGER.info("You have permissions!");
-            return authenticated;
-        }
+
+        return authenticated;
     }
 }

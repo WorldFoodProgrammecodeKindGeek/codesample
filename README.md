@@ -1,4 +1,4 @@
-Telemed Boot Security!
+KindGeek Boot Security!
 ===================
 
 > **Resources:**
@@ -9,7 +9,7 @@ Telemed Boot Security!
 
 ### Integration
 
-Steps to add boot_security to telemed services:
+Steps to add boot_security to KindGeek services:
 
 1. Build boot_security.jar (https://bitbucket.org/kindgeek-platform/boot-security)
 2. In your application add dependencies to .pom file
@@ -48,7 +48,7 @@ public class AccountApplication extends SecuredApplication {}
 5. Add list of required properties to application.properties file
 ```
 # Security configuration
-jwt.key=telemed
+jwt.key=KindGeek
 jwt.header=Authorization
 jwt.uri.param=accessToken
 jwt.token.admin=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJUZWxlbWVkIiwiaWF0IjoxNTA3Mjk1MjQ4LCJleHAiOjE1Mzg4MzEyNDgsImF1ZCI6IiIsInN1YiI6IiIsInVzZXJuYW1lIjoiQWRtaW4iLCJhY2NvdW50X2lkIjoiMSIsInJvbGUiOiJST0xFX0FETUlOIn0.4Nt-sxkWiaY5WawxFsYNAqZjv-4O8Chtu-uTWer8Et0

@@ -1,4 +1,4 @@
-package care.fullcircle.security;
+package com.kindgeek.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Default Json Web Token encoder/decoder.
- *
- * @author Oleh Kuprovskyi <oleh.kuprovskyi@kindgeek.com>
+ * Created by oleh.kuprovskyi on 05.10.17.
  */
 public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
 
@@ -41,7 +39,7 @@ public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
     @Value("${external.url.pattern:#{null}}")
     private String externalUrlPattern;
 
-    @Value("${access.control.allow.origin:#{'http://admin.telemed.com'}}")
+    @Value("${access.control.allow.origin:#{'http://kindgeek.com'}}")
     private String allowOrigin;
 
     @Resource
@@ -55,7 +53,6 @@ public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
 
         // quick route - if external
         if (externalUrlPattern != null && !externalUrlPattern.isEmpty()) {
-//            log.info("looking for pattern " + externalUrlPattern + " in URI " + ((HttpServletRequest)servletRequest).getRequestURI());
             Pattern p = Pattern.compile(externalUrlPattern);
             Matcher m = p.matcher(((HttpServletRequest)servletRequest).getRequestURI());
             if(m.find()){
@@ -64,7 +61,6 @@ public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
                 return;
             }
         }
-
 
         // exclude OPTIONS tests for me
         if ( httpRequest.getMethod().equals(RequestMethod.OPTIONS.name()) ) {
@@ -95,19 +91,19 @@ public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
             }
 
             // verify sessionId
-//            valid = security.checkSessionId(httpRequest, authToken);
-//            if (!valid) {
-//                setErrorResponse(servletResponse, "Not a valid token2");
-//                return;
-//            }
+            valid = security.checkSessionId(httpRequest, authToken);
+            if (!valid) {
+                setErrorResponse(servletResponse, "Not a valid token2");
+                return;
+            }
 
             // verify clientIp
-//            valid = security.checkClientIp(httpRequest, authToken);
-//            if (!valid) {
-//                LOGGER.info("JwtAuthenticationTokenFilter.doFilter.checkClientIp: Not valid clientIp");
-//                setErrorResponse(servletResponse, "Not a valid token");
-//                return;
-//            }
+            valid = security.checkClientIp(httpRequest, authToken);
+            if (!valid) {
+                LOGGER.info("JwtAuthenticationTokenFilter.doFilter.checkClientIp: Not valid clientIp");
+                setErrorResponse(servletResponse, "Not a valid token");
+                return;
+            }
 
             // check expiration
             boolean expired = security.isTokenExpired(authToken);
@@ -136,14 +132,12 @@ public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
 
     }
 
-
     //=======================
     private void setErrorResponse(ServletResponse response, String msg) throws IOException {
         LOGGER.warn("Token error - " + msg);
         ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED);
         ((HttpServletResponse) response).setHeader("WWW-Authenticate","Bearer realm=\"Service\", error=\"invalid_grant\", error_description=\"" + msg + ".\"");
     }
-
 
     //=======================
     private void traceSession(ServletRequest request) {
@@ -157,5 +151,4 @@ public class JwtAuthenticationTokenFilter  extends GenericFilterBean {
             }
         }
     }
-
 }

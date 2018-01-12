@@ -1,4 +1,4 @@
-package care.fullcircle.security;
+package com.kindgeek.security;
 
 import org.springframework.security.core.userdetails.UserDetails;
 

@@ -1,4 +1,4 @@
-package care.fullcircle.security;
+package com.kindgeek.security;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -12,9 +12,8 @@ import javax.servlet.Filter;
 public interface ISecuredApplication {
 
     @Bean
-    public FilterRegistrationBean authorizationFilterRegistration();
+    FilterRegistrationBean authorizationFilterRegistration();
 
     @Bean(name = "jwtFilter")
-    public Filter jwtAuthenticationFilter();
-
+    Filter jwtAuthenticationFilter();
 }
